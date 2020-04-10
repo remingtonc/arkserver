@@ -10,10 +10,11 @@ RUN dpkg --add-architecture i386 && \
     echo steam steam/license note '' | debconf-set-selections && \
     apt-get install -y ca-certificates steamcmd language-pack-en
 
-WORKDIR /home/steam
 
 RUN ln -s /usr/games/steamcmd /usr/local/bin/steamcmd
-RUN ln -s /usr/games/steamcmd /usr/bin/steamcmd
+RUN adduser --gecos "" --disabled-password steam
+
+WORKDIR /home/steam
 
 USER steam
 
