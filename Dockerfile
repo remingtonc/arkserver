@@ -1,4 +1,4 @@
-FROM thmhoag/steamcmd:latest
+FROM cm2network/steamcmd:latest
 
 USER root
 
