@@ -14,10 +14,10 @@ ENV STEAMCMDDIR /home/steam/steamcmd
 RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
-		lib32stdc++6=8.3.0-6 \
-		lib32gcc1=1:8.3.0-6 \
-		wget=1.20.1-1.1 \
-		ca-certificates=20190110 \
+		libstdc++ \
+		libgcc \
+		wget \
+		ca-certificates \
 	&& adduser --gecos "" --uid $PUID --disabled-password steam \
 	&& su steam -c \
 		"mkdir -p ${STEAMCMDDIR} \
