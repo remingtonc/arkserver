@@ -4,8 +4,7 @@ ARG PUID=1000
 
 ENV STEAMCMDDIR /home/steam
 
-VOLUME $STEAMCMDDIR
-WORKDIR $STREAMCMDDIR
+WORKDIR /home/steam
 
 # Install, update & upgrade packages
 # Create user for the server
@@ -41,7 +40,7 @@ RUN steamcmd +quit
 USER root
 
 RUN apt-get update && \
-    apt-get install -y curl cron bzip2 perl-modules lsof libc6-i386 lib32gcc1 sudo
+    apt-get install -y curl cron bzip2 perl-modules lsof sudo
 
 RUN curl -sL "https://raw.githubusercontent.com/FezVrasta/ark-server-tools/v1.6.48/netinstall.sh" | bash -s steam && \
     systemctl disable arkmanager.service && \
