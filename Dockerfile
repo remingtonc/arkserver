@@ -4,34 +4,16 @@ ARG PUID=1000
 
 ENV STEAMCMDDIR /home/steam
 
+RUN dpkg --add-architecture i386 && \
+    apt-get update && \
+    echo steam steam/question select "I AGREE" | debconf-set-selections && \
+    echo steam steam/license note '' | debconf-set-selections && \
+    apt-get install -y ca-certificates steamcmd language-pack-en
+
 WORKDIR /home/steam
 
-# Install, update & upgrade packages
-# Create user for the server
-# This also creates the home directory we later need
-# Clean TMP, apt-get cache and other stuff to make the image smaller
-# Create Directory for SteamCMD
-# Download SteamCMD
-# Extract and delete archive
-RUN set -x \
-	&& apt-get update \
-	&& apt-get install -y --no-install-recommends --no-install-suggests \
-		libstdc++-5-dev \
-        libgcc-7-dev \
-		wget \
-		ca-certificates \
-	&& adduser --gecos "" --uid $PUID --disabled-password steam \
-	&& su steam -c \
-		"mkdir -p ${STEAMCMDDIR} \
-		&& cd ${STEAMCMDDIR} \
-		&& wget -qO- 'https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz' | tar zxf -" \
-	&& apt-get remove --purge -y \
-		wget \
-	&& apt-get clean autoclean \
-	&& apt-get autoremove -y \
-	&& rm -rf /var/lib/apt/lists/*
-
-RUN ln -s /usr/games/steamcmd /usr/local/bin
+RUN ln -s /usr/games/steamcmd /usr/local/bin/steamcmd
+RUN ln -s /usr/games/steamcmd /usr/bin/steamcmd
 
 USER steam
 
