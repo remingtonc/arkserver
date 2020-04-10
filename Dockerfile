@@ -1,8 +1,11 @@
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 
 ARG PUID=1000
 
-ENV STEAMCMDDIR /home/steam/steamcmd
+ENV STEAMCMDDIR /home/steam
+
+VOLUME $STEAMCMDDIR
+WORKDIR $STREAMCMDDIR
 
 # Install, update & upgrade packages
 # Create user for the server
@@ -14,8 +17,8 @@ ENV STEAMCMDDIR /home/steam/steamcmd
 RUN set -x \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends --no-install-suggests \
-		libstdc++ \
-		libgcc \
+		libstdc++-5-dev \
+        libgcc-7-dev \
 		wget \
 		ca-certificates \
 	&& adduser --gecos "" --uid $PUID --disabled-password steam \
@@ -29,16 +32,8 @@ RUN set -x \
 	&& apt-get autoremove -y \
 	&& rm -rf /var/lib/apt/lists/*
 
-# Switch to user steam
-USER steam
-
-WORKDIR $STEAMCMDDIR
-
-VOLUME $STEAMCMDDIR
-
 RUN ln -s /usr/games/steamcmd /usr/local/bin
 
-WORKDIR /home/steam
 USER steam
 
 RUN steamcmd +quit
